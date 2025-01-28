@@ -20,7 +20,7 @@ No Diagrama de Nível 1 do C4, é possível visualizar o contexto geral do siste
 
 Este diagrama de Nível 1 apresenta os principais componentes e fluxos de dados entre o cliente, os serviços internos e os sistemas externos, proporcionando uma visão clara de como as interações acontecem dentro do sistema.
 <h1 align="center">
-  <img alt="C1" src="https://github.com/Jwmffreitas/SistemaDeCredito-Trampay/blob/main/arquitetura/c1.png" width="800px" />
+  <img alt="C1" src="https://github.com/Jwmffreitas/SistemaDeCredito-Trampay/blob/main/arquitetura/SistemaDeCredito-C1.drawio.png" width="800px" />
 </h1>
 
 ### Nível 2 - Containers
