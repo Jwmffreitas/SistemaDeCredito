@@ -1,7 +1,5 @@
-import { CreditRequest } from '../entities/creditRequest.entity';
+import { Credit } from '../../entities/credit.entity';
 
 export interface CreditRequestRepository {
-  create(creditRequest: CreditRequest): Promise<void>;
-  findById(id: string): Promise<CreditRequest | null>;
-  updateStatus(id: string, status: string): Promise<void>;
+  create(creditRequest: Credit): Promise<void>;
 }
