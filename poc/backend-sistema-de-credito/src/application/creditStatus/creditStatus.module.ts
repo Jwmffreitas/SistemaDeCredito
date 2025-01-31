@@ -5,6 +5,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { CreditStatusController } from 'src/presentation/controllers/creditStatus.controller';
 import { PostgresCreditStatusRepository } from 'src/infrastructure/postgres/creditStatusRepository';
 import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
+import { RabbitMQConnector } from 'src/infrastructure/rabbitmq/rabbitmqConnector';
 
 @Module({
   imports: [CqrsModule],
@@ -14,6 +15,7 @@ import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
     PostgresCreditStatusRepository,
     CreateCreditRequestHandler,
     PrismaService,
+    RabbitMQConnector,
   ],
 })
 export class CreditStatusModule {}

@@ -17,7 +17,7 @@ export class CreditRequestService {
       uuidv4(),
       command.userId,
       command.amount,
-      'PENDING',
+      'PENDENTE',
       new Date(),
     );
 
