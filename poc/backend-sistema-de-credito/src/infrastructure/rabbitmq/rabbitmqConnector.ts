@@ -68,7 +68,7 @@ export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
         });
 
         const msgBuffer = Buffer.from(JSON.stringify(message));
-        await this.channel.publish(exchange, '', msgBuffer);
+        this.channel.publish(exchange, '', msgBuffer);
 
         Logger.log(
           `📩 Mensagem enviada para a exchange [${exchange}]`,
