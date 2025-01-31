@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend-credit:
-    build: .
+    build: ./backend-sistema-de-credito
     container_name: backend-credit
     ports:
       - "3000:3000"
