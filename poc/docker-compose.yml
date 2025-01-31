@@ -15,6 +15,17 @@ services:
       - credit-system-rabbitmq
       - credit-system-postgres
 
+  adapter-credit-analyses:
+    build: ./adapter-analise-de-credito
+    container_name: adapter-credit-analyses
+    ports:
+      - "3001:3001"
+    environment:
+      - RABBITMQ_URL=amqp://user:password@credit-system-rabbitmq:5672
+      - NODE_ENV=production
+    depends_on:
+      - credit-system-rabbitmq
+
   credit-system-rabbitmq:
     image: "rabbitmq:3-management"
     container_name: credit-system-rabbitmq

@@ -24,10 +24,13 @@ export class CreditStatusService {
   }
 
   async consumeAndUpdate(): Promise<void> {
+    Logger.log(
+      `Consumindo mensagens da exchange [creditAnalyses] da fila [backend.updateCreditStatus]`,
+    );
     await this.rabbitMQ.consume(
       'creditAnalyses',
-      'backend.updateCreditStatus',
       '',
+      'backend.updateCreditStatus',
       async (message: any) => {
         Logger.log(`📥 Mensagem recebida: ${JSON.stringify(message)}`);
 

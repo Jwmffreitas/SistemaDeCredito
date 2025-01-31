@@ -10,9 +10,7 @@ import { ConfirmChannel, Connection, connect } from 'amqplib';
 export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
   private connection: Connection | null;
   private channel: ConfirmChannel | null;
-  private readonly url =
-    process.env.RABBITMQ_URL || 'amqp://user:password@192.168.1.4:5672';
-  //'amqp://localhost';
+  private readonly url = process.env.RABBITMQ_URL || 'amqp://localhost';
 
   async onModuleInit(): Promise<void> {
     await this.connect();
@@ -112,7 +110,7 @@ export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
       });
 
       Logger.log(
-        `👂 Consumindo mensagens da exchange [${exchange}] com routingKey [${routingKey}]`,
+        `👂 Consumindo mensagens da exchange [${exchange}] na fila [${queue}]`,
       );
     } catch (error) {
       Logger.error('❌ Erro ao configurar consumo:', error);

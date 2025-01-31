@@ -14,8 +14,8 @@ export class CreditRequestAdapterService {
   async consumeAndProcess(): Promise<void> {
     await this.rabbitMQ.consume(
       'creditRequest',
-      'adapter.creditAnalyses',
       '',
+      'adapter.creditAnalyses',
       (message: any) => {
         this.logger.log(`📥 Mensagem recebida: ${JSON.stringify(message)}`);
 
