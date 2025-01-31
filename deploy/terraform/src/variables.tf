@@ -12,17 +12,22 @@ variable "region" {
 variable "db_user" {
   description = "Usuário do banco de dados"
   type        = string
-  default     = "admin"
 }
 
 variable "db_password" {
   description = "Senha do banco de dados"
   type        = string
-  sensitive   = true
 }
 
 variable "db_name" {
   description = "Nome do banco de dados"
   type        = string
-  default     = "Credit"
+  default     = "creditdb"
 }
+
+variable "gke_service_account" {
+  description = "Service Account usada pelo GKE para acessar Cloud SQL"
+  type        = string
+  default     = "gke-service-account"
+}
+
