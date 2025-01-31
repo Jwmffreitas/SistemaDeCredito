@@ -72,6 +72,8 @@ export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
   }
 
   async consume(
+    exchange: string,
+    routingKey: string,
     queue: string,
     callback: (msg: Record<string, unknown>) => void,
   ): Promise<void> {
@@ -87,9 +89,13 @@ export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
         return;
       }
 
-      await this.channel.assertQueue(queue, { durable: true });
+      await this.channel.assertExchange(exchange, 'fanout', { durable: true });
 
-      this.channel.consume(queue, (msg) => {
+      const q = await this.channel.assertQueue(queue, { exclusive: true });
+
+      await this.channel.bindQueue(q.queue, exchange, routingKey);
+
+      this.channel.consume(q.queue, (msg) => {
         if (!msg) return;
 
         try {
@@ -106,7 +112,9 @@ export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
         this.channel?.ack(msg);
       });
 
-      Logger.log(`👂 Consumindo mensagens da fila [${queue}]`);
+      Logger.log(
+        `👂 Consumindo mensagens da exchange [${exchange}] com routingKey [${routingKey}]`,
+      );
     } catch (error) {
       Logger.error('❌ Erro ao configurar consumo:', error);
     }
