@@ -61,6 +61,7 @@ spec:
       containers:
         - name: adapter-credit-analyses
           image: gcr.io/possible-post-449514-a8/adapter-credit-analyses:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3001
           env:
@@ -98,6 +99,7 @@ spec:
       containers:
         - name: backend-credit
           image: gcr.io/possible-post-449514-a8/backend-credit:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           env:
