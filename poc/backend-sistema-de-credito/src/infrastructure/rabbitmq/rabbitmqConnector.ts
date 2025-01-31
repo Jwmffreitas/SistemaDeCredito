@@ -56,11 +56,16 @@ export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
         return;
       }
 
-      const msgBuffer = Buffer.from(JSON.stringify(message));
-      await this.channel.assertQueue(queue, { durable: true });
-      this.channel.sendToQueue(queue, msgBuffer, { persistent: true });
+      const exchange = 'creditRequest';
+      const exchangeType = 'fanout';
+      await this.channel.assertExchange(exchange, exchangeType, {
+        durable: true,
+      });
 
-      Logger.log(`📩 Mensagem enviada para a fila [${queue}]`, message);
+      const msgBuffer = Buffer.from(JSON.stringify(message));
+      await this.channel.publish(exchange, msgBuffer);
+
+      Logger.log(`📩 Mensagem enviada para a exchange [${exchange}]`, message);
     } catch (error) {
       Logger.error('❌ Erro ao publicar mensagem:', error);
     }
