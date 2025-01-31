@@ -7,14 +7,14 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - RABBITMQ_URL=amqp://rabbitmq:5672
-      - DATABASE_URL=postgresql://user:password@postgres:5432/creditdb
+      - RABBITMQ_URL=amqp://user:password@credit-system-rabbitmq:5672
+      - DATABASE_URL=postgresql://user:password@credit-system-postgres:5432/creditdb
       - NODE_ENV=production
     depends_on:
       - rabbitmq
       - postgres
 
-  rabbitmq:
+  credit-system-rabbitmq:
     image: "rabbitmq:3-management"
     container_name: credit-system-rabbitmq
     ports:
@@ -26,7 +26,7 @@ services:
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
 
-  postgres:
+  credit-system-postgres:
     image: "postgres:13"
     container_name: credit-system-postgres
     environment:
