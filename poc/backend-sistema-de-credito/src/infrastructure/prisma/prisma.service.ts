@@ -13,11 +13,11 @@ export class PrismaService
 {
   async onModuleInit() {
     await this.$connect();
-    Logger.log('🟢 Conectado ao banco de dados');
+    Logger.log('Conectado ao banco de dados');
   }
 
   async onModuleDestroy() {
     await this.$disconnect();
-    Logger.log('🔴 Desconectado do banco de dados');
+    Logger.log('Desconectado do banco de dados');
   }
 }

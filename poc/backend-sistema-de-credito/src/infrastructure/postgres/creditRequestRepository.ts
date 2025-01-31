@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreditRequestRepository } from '../../domain/creditRequest/repositories/creditRequest.repository';
 import { Credit } from '../../domain/entities/credit.entity';
@@ -10,7 +10,7 @@ export class PostgresCreditRequestRepository
   constructor(private readonly prisma: PrismaService) {}
 
   async create(creditRequest: Credit): Promise<void> {
-    console.log('Criando CreditRequest no banco de dados:', creditRequest);
+    Logger.log('Criando CreditRequest no banco de dados:', creditRequest);
 
     await this.prisma.credit.create({
       data: {
