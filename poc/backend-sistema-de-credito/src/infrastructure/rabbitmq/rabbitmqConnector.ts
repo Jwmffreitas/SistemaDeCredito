@@ -8,8 +8,8 @@ import { ConfirmChannel, Connection, connect } from 'amqplib';
 
 @Injectable()
 export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
-  private connection: Connection;
-  private channel: ConfirmChannel;
+  private connection: Connection | null;
+  private channel: ConfirmChannel | null;
   private readonly url = process.env.RABBITMQ_URL || 'amqp://localhost';
 
   async onModuleInit(): Promise<void> {
@@ -63,7 +63,7 @@ export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
       });
 
       const msgBuffer = Buffer.from(JSON.stringify(message));
-      await this.channel.publish(exchange, msgBuffer);
+      await this.channel.publish(exchange, '', msgBuffer);
 
       Logger.log(`📩 Mensagem enviada para a exchange [${exchange}]`, message);
     } catch (error) {
