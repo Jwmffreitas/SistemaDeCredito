@@ -4,6 +4,7 @@ import { CreateCreditRequestHandler } from './handlers/creditStatus.handler';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CreditStatusController } from 'src/presentation/controllers/creditStatus.controller';
 import { PostgresCreditStatusRepository } from 'src/infrastructure/postgres/creditStatusRepository';
+import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
 
 @Module({
   imports: [CqrsModule],
@@ -12,6 +13,7 @@ import { PostgresCreditStatusRepository } from 'src/infrastructure/postgres/cred
     CreditStatusService,
     PostgresCreditStatusRepository,
     CreateCreditRequestHandler,
+    PrismaService,
   ],
 })
 export class CreditStatusModule {}

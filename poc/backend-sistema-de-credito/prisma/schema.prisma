@@ -9,7 +9,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model CreditRequest {
+model Credit {
   id        String   @id @default(uuid())
   userId    String
   amount    Float

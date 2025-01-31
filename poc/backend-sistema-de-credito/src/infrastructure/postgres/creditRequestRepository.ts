@@ -12,7 +12,7 @@ export class PostgresCreditRequestRepository
   async create(creditRequest: Credit): Promise<void> {
     console.log('Criando CreditRequest no banco de dados:', creditRequest);
 
-    await this.prisma.creditRequest.create({
+    await this.prisma.credit.create({
       data: {
         id: creditRequest.id,
         userId: creditRequest.userId,
