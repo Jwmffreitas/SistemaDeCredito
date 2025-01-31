@@ -31,3 +31,8 @@ variable "gke_service_account" {
   default     = "gke-service-account"
 }
 
+variable "authorized_network_ip" {
+  description = "IP autorizado para acessar o banco (ex: seu IP público)"
+  type        = string
+}
+

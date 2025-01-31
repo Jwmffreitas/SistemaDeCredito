@@ -102,7 +102,7 @@ export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
           durable: true,
         });
 
-        const q = await this.channel.assertQueue(queue, { exclusive: true });
+        const q = await this.channel.assertQueue(queue, { exclusive: false });
         await this.channel.bindQueue(q.queue, exchange, routingKey);
 
         await this.channel.consume(q.queue, (msg) => {

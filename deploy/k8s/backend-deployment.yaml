@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-credit
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend-credit
+  template:
+    metadata:
+      labels:
+        app: backend-credit
+    spec:
+      containers:
+        - name: backend-credit
+          image: gcr.io/SEU-PROJETO/backend-credit:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://trampay:joaovitor@CLOUDSQL_IP:5432/creditdb"
+            - name: RABBITMQ_URL
+              value: "amqp://user:password@credit-system-rabbitmq:5672"
+          command: ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-credit
+spec:
+  selector:
+    app: backend-credit
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer

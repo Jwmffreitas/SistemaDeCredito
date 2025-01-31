@@ -1,7 +1,17 @@
-output "db_instance_name" {
-  value = google_sql_database_instance.db_instance.name
+output "sql_instance_name" {
+  value = module.cloudsql.name
 }
 
-output "db_public_ip" {
-  value = google_sql_database_instance.db_instance.public_ip_address
+output "gke_cluster_name" {
+  value = module.gke.gke_cluster_name
+}
+output "gke_cluster_endpoint" {
+  value = module.gke.gke_cluster_endpoint
+}
+output "gke_service_account_email" {
+  value = module.gke.gke_service_account_email
+}
+
+output "sql_instance_ip" {
+  value = module.cloudsql.cloud_sql_ip
 }
