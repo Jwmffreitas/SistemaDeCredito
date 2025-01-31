@@ -38,10 +38,7 @@ export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  async publish(
-    queue: string,
-    message: Record<string, unknown>,
-  ): Promise<void> {
+  async publish(message: Record<string, unknown>): Promise<void> {
     try {
       if (!this.channel) {
         Logger.warn(
@@ -117,6 +114,9 @@ export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
       );
     } catch (error) {
       Logger.error('❌ Erro ao configurar consumo:', error);
+      setTimeout(() => {
+        void this.consume(exchange, routingKey, queue, callback);
+      }, 5000);
     }
   }
 

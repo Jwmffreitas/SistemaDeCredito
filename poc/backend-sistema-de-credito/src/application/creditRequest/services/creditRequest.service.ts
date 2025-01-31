@@ -30,6 +30,6 @@ export class CreditRequestService {
 
   async sendRequest(creditRequest: Credit) {
     const payload = { ...creditRequest };
-    await this.rabbitMQ.publish('credit_analysis_queue', payload);
+    await this.rabbitMQ.publish(payload);
   }
 }

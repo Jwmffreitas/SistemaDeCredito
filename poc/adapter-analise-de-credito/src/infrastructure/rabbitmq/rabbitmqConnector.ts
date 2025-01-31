@@ -114,6 +114,9 @@ export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
       );
     } catch (error) {
       Logger.error('❌ Erro ao configurar consumo:', error);
+      setTimeout(() => {
+        void this.consume(exchange, routingKey, queue, callback);
+      }, 5000);
     }
   }
 
