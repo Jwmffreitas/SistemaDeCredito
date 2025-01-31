@@ -80,38 +80,39 @@ export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
           '⚠️ Canal do RabbitMQ não está pronto, tentando reconectar...',
         );
         await this.connect();
-      }
-      if (!this.channel) {
-        Logger.error('❌ Falha ao iniciar consumo: canal ainda indisponível.');
-        return;
-      }
+      } else {
+        await this.channel.assertExchange(exchange, 'fanout', {
+          durable: true,
+        });
 
-      await this.channel.assertExchange(exchange, 'fanout', { durable: true });
+        const q = await this.channel.assertQueue(queue, { exclusive: true });
 
-      const q = await this.channel.assertQueue(queue, { exclusive: true });
+        await this.channel.bindQueue(q.queue, exchange, routingKey);
 
-      await this.channel.bindQueue(q.queue, exchange, routingKey);
+        this.channel.consume(q.queue, (msg) => {
+          if (!msg) return;
 
-      this.channel.consume(q.queue, (msg) => {
-        if (!msg) return;
-
-        try {
-          const content: unknown = JSON.parse(msg.content.toString());
-          if (typeof content === 'object' && content !== null) {
-            callback(content as Record<string, unknown>);
-          } else {
-            Logger.warn('⚠️ Mensagem recebida em formato inesperado:', content);
+          try {
+            const content: unknown = JSON.parse(msg.content.toString());
+            if (typeof content === 'object' && content !== null) {
+              callback(content as Record<string, unknown>);
+            } else {
+              Logger.warn(
+                '⚠️ Mensagem recebida em formato inesperado:',
+                content,
+              );
+            }
+          } catch (error) {
+            Logger.error('❌ Erro ao processar mensagem:', error);
           }
-        } catch (error) {
-          Logger.error('❌ Erro ao processar mensagem:', error);
-        }
 
-        this.channel?.ack(msg);
-      });
+          this.channel?.ack(msg);
+        });
 
-      Logger.log(
-        `👂 Consumindo mensagens da exchange [${exchange}] na fila [${queue}]`,
-      );
+        Logger.log(
+          `👂 Consumindo mensagens da exchange [${exchange}] na fila [${queue}]`,
+        );
+      }
     } catch (error) {
       Logger.error('❌ Erro ao configurar consumo:', error);
       setTimeout(async () => {
