@@ -11,8 +11,8 @@ services:
       - DATABASE_URL=postgresql://user:password@credit-system-postgres:5432/creditdb
       - NODE_ENV=production
     depends_on:
-      - rabbitmq
-      - postgres
+      - credit-system-rabbitmq
+      - credit-system-postgres
 
   credit-system-rabbitmq:
     image: "rabbitmq:3-management"
