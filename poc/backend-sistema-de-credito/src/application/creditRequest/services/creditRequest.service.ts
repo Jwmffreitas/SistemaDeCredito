@@ -12,7 +12,7 @@ export class CreditRequestService {
     private readonly rabbitMQ: RabbitMQConnector,
   ) {}
 
-  async createRequest(command: CreateCreditRequestCommand): Promise<void> {
+  async createRequest(command: CreateCreditRequestCommand): Promise<Credit> {
     const creditRequest = new Credit(
       uuidv4(),
       command.userId,
@@ -24,6 +24,8 @@ export class CreditRequestService {
     await this.creditRequestRepository.create(creditRequest);
 
     await this.sendRequest(creditRequest);
+
+    return creditRequest;
   }
 
   async sendRequest(creditRequest: Credit) {
