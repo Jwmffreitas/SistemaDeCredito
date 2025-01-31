@@ -7,7 +7,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - RABBITMQ_URL=rabbitmq://rabbitmq:5672
+      - RABBITMQ_URL=amqp://rabbitmq:5672
       - DATABASE_URL=postgresql://user:password@postgres:5432/creditdb
       - NODE_ENV=production
     depends_on:

@@ -5,6 +5,7 @@ import { CreateCreditRequestHandler } from './handlers/createCreditRequest.handl
 import { PostgresCreditRequestRepository } from '../../infrastructure/postgres/creditRequestRepository';
 import { CqrsModule } from '@nestjs/cqrs';
 import { RabbitMQConnector } from 'src/infrastructure/rabbitmq/rabbitmqConnector';
+import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
 
 @Module({
   imports: [CqrsModule],
@@ -12,6 +13,7 @@ import { RabbitMQConnector } from 'src/infrastructure/rabbitmq/rabbitmqConnector
   providers: [
     CreditRequestService,
     PostgresCreditRequestRepository,
+    PrismaService,
     CreateCreditRequestHandler,
     RabbitMQConnector,
   ],
