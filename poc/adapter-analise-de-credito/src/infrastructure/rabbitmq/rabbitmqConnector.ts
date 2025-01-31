@@ -8,12 +8,25 @@ import { ConfirmChannel, Connection, connect } from 'amqplib';
 
 @Injectable()
 export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
-  private connection: Connection | null;
-  private channel: ConfirmChannel | null;
+  private connection: Connection | null = null;
+  private channel: ConfirmChannel | null = null;
   private readonly url = process.env.RABBITMQ_URL || 'amqp://localhost';
 
   async onModuleInit(): Promise<void> {
-    await this.connect();
+    await this.connect().catch((error) =>
+      Logger.error('Erro ao conectar:', error),
+    );
+  }
+
+  private async ensureConnection(): Promise<void> {
+    if (!this.channel) {
+      Logger.warn(
+        '⚠️ Canal do RabbitMQ não está pronto. Tentando reconectar...',
+      );
+      await this.connect().catch((error) =>
+        Logger.error('Erro ao conectar:', error),
+      );
+    }
   }
 
   async connect(): Promise<void> {
@@ -30,22 +43,30 @@ export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
         Logger.warn('⚠️ Conexão com RabbitMQ fechada, tentando reconectar...');
         this.channel = null;
         this.connection = null;
-        setTimeout(() => this.connect(), 5000);
+        setTimeout(
+          () =>
+            this.connect().catch((error) =>
+              Logger.error('Erro ao reconectar:', error),
+            ),
+          5000,
+        );
       });
     } catch (error) {
       Logger.error('❌ Falha ao conectar no RabbitMQ:', error);
-      setTimeout(() => this.connect(), 5000);
+      setTimeout(
+        () =>
+          this.connect().catch((error) =>
+            Logger.error('Erro ao reconectar:', error),
+          ),
+        5000,
+      );
     }
   }
 
   async publish(message: Record<string, unknown>): Promise<void> {
     try {
-      if (!this.channel) {
-        Logger.warn(
-          '⚠️ Canal do RabbitMQ não está pronto, tentando reconectar...',
-        );
-        await this.connect();
-      }
+      await this.ensureConnection();
+
       if (!this.channel) {
         Logger.error(
           '❌ Falha ao publicar mensagem: canal ainda indisponível.',
@@ -65,6 +86,13 @@ export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
       Logger.log(`📩 Mensagem enviada para a exchange [${exchange}]`, message);
     } catch (error) {
       Logger.error('❌ Erro ao publicar mensagem:', error);
+      setTimeout(
+        () =>
+          this.publish(message).catch((error) =>
+            Logger.error('Erro ao publicar após falha:', error),
+          ),
+        5000,
+      );
     }
   }
 
@@ -75,54 +103,56 @@ export class RabbitMQConnector implements OnModuleInit, OnModuleDestroy {
     callback: (msg: Record<string, unknown>) => void,
   ): Promise<void> {
     try {
+      await this.ensureConnection();
+
       if (!this.channel) {
-        Logger.warn(
-          '⚠️ Canal do RabbitMQ não está pronto, tentando reconectar...',
+        Logger.error(
+          '❌ Falha ao consumir mensagem: canal ainda indisponível.',
         );
-        await this.connect();
-      } else {
-        await this.channel.assertExchange(exchange, 'fanout', {
-          durable: true,
-        });
-
-        const q = await this.channel.assertQueue(queue, { exclusive: true });
-
-        await this.channel.bindQueue(q.queue, exchange, routingKey);
-
-        this.channel.consume(q.queue, (msg) => {
-          if (!msg) return;
-
-          try {
-            const content: unknown = JSON.parse(msg.content.toString());
-            if (typeof content === 'object' && content !== null) {
-              callback(content as Record<string, unknown>);
-            } else {
-              Logger.warn(
-                '⚠️ Mensagem recebida em formato inesperado:',
-                content,
-              );
-            }
-          } catch (error) {
-            Logger.error('❌ Erro ao processar mensagem:', error);
-          }
-
-          this.channel?.ack(msg);
-        });
-
-        Logger.log(
-          `👂 Consumindo mensagens da exchange [${exchange}] na fila [${queue}]`,
-        );
+        return;
       }
+
+      await this.channel.assertExchange(exchange, 'fanout', {
+        durable: true,
+      });
+
+      const q = await this.channel.assertQueue(queue, { exclusive: true });
+      await this.channel.bindQueue(q.queue, exchange, routingKey);
+
+      this.channel.consume(q.queue, (msg) => {
+        if (!msg) return;
+
+        try {
+          const content: unknown = JSON.parse(msg.content.toString());
+          if (typeof content === 'object' && content !== null) {
+            callback(content as Record<string, unknown>);
+          } else {
+            Logger.warn('⚠️ Mensagem recebida em formato inesperado:', content);
+          }
+        } catch (error) {
+          Logger.error('❌ Erro ao processar mensagem:', error);
+        }
+
+        this.channel?.ack(msg);
+      });
+
+      Logger.log(
+        `👂 Consumindo mensagens da exchange [${exchange}] na fila [${queue}]`,
+      );
     } catch (error) {
       Logger.error('❌ Erro ao configurar consumo:', error);
-      setTimeout(async () => {
-        await this.consume(exchange, routingKey, queue, callback);
+      setTimeout(() => {
+        this.consume(exchange, routingKey, queue, callback).catch((error) =>
+          Logger.error('Erro ao consumir após falha:', error),
+        );
       }, 5000);
     }
   }
 
   async onModuleDestroy(): Promise<void> {
-    await this.closeConnection();
+    await this.closeConnection().catch((error) =>
+      Logger.error('Erro ao fechar a conexão:', error),
+    );
   }
 
   async closeConnection(): Promise<void> {
