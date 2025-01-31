@@ -10,6 +10,7 @@ services:
       - RABBITMQ_URL=amqp://user:password@credit-system-rabbitmq:5672
       - DATABASE_URL=postgresql://user:password@credit-system-postgres:5432/creditdb
       - NODE_ENV=production
+    command: ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
     depends_on:
       - credit-system-rabbitmq
       - credit-system-postgres
