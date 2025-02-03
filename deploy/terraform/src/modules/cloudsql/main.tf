@@ -1,9 +1,9 @@
 resource "google_sql_database_instance" "postgres" {
-  name             = "credit-db-instance"
-  project          = var.project_id
-  region           = var.region
-  deletion_protection      = false
-  database_version = "POSTGRES_14"
+  name                = "credit-db-instance"
+  project             = var.project_id
+  region              = var.region
+  deletion_protection = false
+  database_version    = "POSTGRES_14"
 
   settings {
     tier = "db-f1-micro"

@@ -5,17 +5,18 @@ resource "google_container_cluster" "credit_cluster" {
   deletion_protection      = false
   networking_mode          = "VPC_NATIVE"
   ip_allocation_policy {}
+
+  initial_node_count = 1
 }
 
 resource "google_container_node_pool" "credit_nodes" {
   name       = "credit-node-pool"
   cluster    = google_container_cluster.credit_cluster.name
   location   = var.region
-  node_count = 2
 
   node_config {
-    machine_type = "e2-medium" # 2 vCPUs e 4GB RAM por nó
-    disk_size_gb = 50
+    machine_type = "e2-standard-2" # 2 vCPUs e 8GB RAM por nó
+    disk_size_gb = 20
     oauth_scopes = ["https://www.googleapis.com/auth/cloud-platform"]
     metadata     = { disable-legacy-endpoints = "true" }
   }

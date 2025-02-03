@@ -16,9 +16,10 @@ provider "google" {
 
 
 module "gke" {
-  source     = "./modules/gke"
-  project_id = var.project_id
-  cloud_sql_ip = module.cloudsql.cloud_sql_ip
+  depends_on  = [module.cloudsql]
+  source      = "./modules/gke"
+  project_id  = var.project_id
+  cloudsql_ip = module.cloudsql.cloud_sql_ip
 }
 
 module "cloudsql" {
@@ -59,9 +60,10 @@ resource "null_resource" "install_helm_and_monitoring_services" {
 }
 
 resource "null_resource" "deploy_services" {
-    depends_on = [
+  depends_on = [
     module.gke.credit_cluster, # Garante que o cluster GKE seja criado antes de executar os comandos
-    module.gke.credit_nodes    # Garante que o node pool esteja pronto
+    module.gke.credit_nodes,   # Garante que o node pool esteja pronto
+    null_resource.install_helm_and_monitoring_services
   ]
 
   provisioner "local-exec" {
@@ -72,7 +74,7 @@ resource "null_resource" "deploy_services" {
 
   triggers = {
     cloud_sql_ip = module.cloudsql.cloud_sql_ip
-    timestamp = timestamp()
+    timestamp    = timestamp()
   }
 }
 

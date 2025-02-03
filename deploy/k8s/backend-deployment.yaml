@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend-credit
-          image: gcr.io/SEU-PROJETO/backend-credit:latest
+          image: gcr.io/possible-post-449514-a8/backend-credit:latest
           ports:
             - containerPort: 3000
           env:

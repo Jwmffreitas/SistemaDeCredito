@@ -104,7 +104,7 @@ spec:
             - containerPort: 3000
           env:
             - name: DATABASE_URL
-              value: "postgresql://trampay:joaovitor@34.56.105.141:5432/creditdb"
+              value: "postgresql://trampay:joaovitor@35.223.168.92:5432/creditdb"
             - name: RABBITMQ_URL
               value: "amqp://user:password@credit-system-rabbitmq:5672"
           command: ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]

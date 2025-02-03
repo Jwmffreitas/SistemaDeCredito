@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: adapter-credit-analyses
-          image: gcr.io/SEU-PROJETO/adapter-credit-analyses:latest
+          image: gcr.io/possible-post-449514-a8/adapter-credit-analyses:latest
           ports:
             - containerPort: 3001
           env:
