@@ -1,7 +1,3 @@
-Aqui está um README de sumário para ficar na raiz do projeto, com links para os demais documentos:  
-
----
-
 # 🚀 **Sistema de Crédito - Trampay**  
 
 Este repositório contém uma **Prova de Conceito (POC)** de um sistema de crédito assíncrono, utilizando **NestJS**, **RabbitMQ**, **PostgreSQL** e **Kubernetes no Google Cloud**.  
