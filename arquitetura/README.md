@@ -143,10 +143,10 @@ DTOs (Data Transfer Objects): Para transferência de dados entre o cliente e o b
 **Manutenabilidade:**
 Cada módulo, como Credit Request e Credit Status, possui sua própria estrutura bem definida, com seus próprios bounded contexts. Isso facilita a manutenção e evolução do sistema, já que as mudanças são isoladas por domínio.
 
-### Nível 4 - Classe (UML)
-
-O Nível 4 do modelo C4, que detalharia a implementação de classes e objetos específicos, foi considerado não necessário neste momento, já que o projeto incluirá uma POC (Proof of Concept) que demonstrará de forma prática os aspectos abordados neste nível. A POC fornecerá o detalhamento necessário para validação da arquitetura e implementação, eliminando a necessidade de um diagrama de granularidade tão baixa neste estágio.
-
 <h1 align="center">
   <img alt="C3" src="https://github.com/Jwmffreitas/SistemaDeCredito-Trampay/blob/main/arquitetura/SistemaDeCredito-C3.drawio.png" />
 </h1>
+
+### Nível 4 - Classe (UML)
+
+O Nível 4 do modelo C4, que detalharia a implementação de classes e objetos específicos, foi considerado não necessário neste momento, já que o projeto incluirá uma POC (Proof of Concept) que demonstrará de forma prática os aspectos abordados neste nível. A POC fornecerá o detalhamento necessário para validação da arquitetura e implementação, eliminando a necessidade de um diagrama de granularidade tão baixa neste estágio.
