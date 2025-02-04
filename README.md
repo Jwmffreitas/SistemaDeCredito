@@ -16,14 +16,14 @@ Este repositório contém uma **Prova de Conceito (POC)** de um sistema de créd
 
 ## 📖 **Sumário**  
 
+🔹 **[Arquitetura e Fluxo do Sistema](arquitetura/README.md)**  
+Detalhamento da estrutura do projeto, organização das pastas e fluxo de mensagens no RabbitMQ.  
+
 🔹 **[POC - Sistema de Crédito](poc/README.md)**  
 Explicação detalhada sobre a arquitetura do sistema, tecnologias utilizadas e instruções para rodar localmente ou via Docker.  
 
 🔹 **[Infraestrutura e Deploy](deploy/README.md)**  
 Guia para provisionamento da infraestrutura no **Google Cloud**, utilizando **Terraform** e **GKE**, além do deploy no Kubernetes.  
-
-🔹 **[Arquitetura e Fluxo do Sistema](arquitetura/README.md)**  
-Detalhamento da estrutura do projeto, organização das pastas e fluxo de mensagens no RabbitMQ.  
 
 ---
 
